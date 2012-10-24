@@ -3,7 +3,13 @@
  */
 /*jshint smarttabs:true jquery:true browser:true expr:true*/
 /*global define*/
-define([ "jquery" ], function($){
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(['jquery'], factory);
+    } else {
+        factory(jQuery);
+    }
+}(function ($) {
 	"use strict";
 	var Draggable = function(element,options){
 		// instance globals for use later
@@ -102,4 +108,4 @@ define([ "jquery" ], function($){
 		yMin: false,		// top boundary
 		yMax: false			// bottom boundary
 	};
-});
+}));
