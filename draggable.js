@@ -11,6 +11,7 @@
     }
 }(function ($) {
 	"use strict";
+
 	var Draggable = function(element,options){
 		// instance globals for use later
 		var offsetStartX, offsetStartY, positionStartX, positionStartY, pageStartX, pageStartY;
@@ -18,41 +19,54 @@
 		var opts = options;	// instance options
 		var height = $el.outerHeight();
 		var width = $el.outerWidth();
+		var origCursor = $el.css("cursor");
+
+		// touch event polyfill
+		var touchable = 'ontouchstart' in window.document;
+		var eStart = touchable ? 'touchstart' : 'mousedown';
+		var eMove = touchable ? 'touchmove' : 'mousemove';
+		var eEnd = touchable ? 'touchend' : 'mouseup';
 
 		// assign cursor type
 		opts.cursor && $el.css("cursor",opts.cursor);
 
-		$el.on("mousedown", startDrag);
+		// event listeners
+		$el.on(eStart, startDrag)
+		   .on("dragremove", destroy);
 
 		// startDrag()
 		function startDrag(e){
+			// e.preventDefault();
+			var ev = touchable ? e.originalEvent : e;
 			var offset = $el.offset();
 			var position = $el.position();
 
 			// get click position
-			pageStartX = e.pageX;
-			pageStartY = e.pageY;
+			pageStartX = ev.pageX;
+			pageStartY = ev.pageY;
 			offsetStartX = offset.left + width - pageStartX;
 			offsetStartY = position.top + height - pageStartY;
 			positionStartX = position.left;
 			positionStartY = position.top;
 
-			$(window).on("mousemove.dragging", doDrag)
-					 .on("mouseup", stopDrag);
+			$(window).on(eMove, doDrag)
+					 .on(eEnd, stopDrag);
 		}
 
 		// stopDrag()
 		function stopDrag(){
-			$(window).off("mousemove.dragging", doDrag);
+			$(window).off(eMove, doDrag);
 		}
 
 		// doDrag()
 		function doDrag(e){
+			e.preventDefault();
+			var ev = touchable ? e.originalEvent : e;
 			var newX, newY;		// will be used later
 			var position = {};	// container for positioning via css
 			var change = {
-				dX: e.pageX - pageStartX,	// horizontal change
-				dY: e.pageY - pageStartY	// vertical change
+				dX: ev.pageX - pageStartX,	// horizontal change
+				dY: ev.pageY - pageStartY	// vertical change
 			};
 
 			// set new coordinates
@@ -62,8 +76,8 @@
 				newY = change.dY + positionStartY;
 			} else {
 				// relative to page
-				newX = e.pageX + offsetStartX - width;
-				newY = e.pageY + offsetStartY - height;
+				newX = ev.pageX + offsetStartX - width;
+				newY = ev.pageY + offsetStartY - height;
 			}
 
 			// horizontal constraints
@@ -82,6 +96,14 @@
 
 			// trigger move event on object
 			$el.trigger("move");
+		}
+
+		// destroy()
+		function destroy() {
+			$el.off(eStart, startDrag)
+			   .off("dragremove", destroy)
+			   .css({"cursor": origCursor})
+			   .removeData("draggable");
 		}
 	};
 
