@@ -56,29 +56,24 @@
 		// stopDrag()
 		function stopDrag(){
 			$(window).off(eMove, doDrag);
+			$el.trigger(opts.eventEnd);
 		}
 
 		// doDrag()
 		function doDrag(e){
 			e.preventDefault();
 			var ev = touchable ? e.originalEvent : e;
-			var newX, newY;		// will be used later
 			var position = {};	// container for positioning via css
 			var change = {
 				dX: ev.pageX - pageStartX,	// horizontal change
 				dY: ev.pageY - pageStartY	// vertical change
 			};
-
-			// set new coordinates
-			if (opts.contain) {
-				// relative to parent
-				newX = change.dX + positionStartX;
-				newY = change.dY + positionStartY;
-			} else {
-				// relative to page
-				newX = ev.pageX + offsetStartX - width;
-				newY = ev.pageY + offsetStartY - height;
-			}
+			var newX = opts.contain ?
+				change.dX + positionStartX :
+				ev.pageX + offsetStartX - width;
+			var newY = opts.contain ?
+				change.dY + positionStartY :
+				ev.pageY + offsetStartY - height;
 
 			// horizontal constraints
 			if (opts.xMin !== false && newX <= opts.xMin) newX = opts.xMin;
@@ -87,7 +82,7 @@
 			if (opts.yMin !== false && newY <= opts.yMin) newY = opts.yMin;
 			if (opts.yMax !== false && newY >= opts.yMax) newY = opts.yMax;
 
-			// populate position {}
+			// populate position object
 			if (opts.horizontal) position.left = newX;
 			if (opts.vertical) position.top = newY;
 
@@ -95,7 +90,7 @@
 			opts.contain ? $el.css(position) : $el.offset(position);
 
 			// trigger move event on object
-			$el.trigger("move");
+			$el.trigger(opts.eventDrag);
 		}
 
 		// destroy()
@@ -123,6 +118,8 @@
 	$.fn.draggable.defaults = {
 		cursor: "move",		// cursor type developer.mozilla.org/en-US/docs/CSS/cursor
 		contain: true,		// contain within parent
+		eventDrag: "drag",	// event triggered on drag
+		eventEnd: "dragEnd",// event triggered on drag end
 		horizontal: true,	// draggable horizontally
 		vertical: true,		// draggable vertically
 		xMin: false,		// left boundary
