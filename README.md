@@ -3,4 +3,5 @@ draggable
 
 jQuery Draggable w/o jQueryUI.
 
-### See source for inline documentation.
+### Documentation and examples:
+[Draggable.js Github Page](http://dfarnsworth.github.com/draggable/)
