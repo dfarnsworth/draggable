@@ -1,4 +1,4 @@
-/*! Draggable - v0.5.0 - 2012-11-06
+/*! Draggable - v0.5.0 - 2012-11-11
 * https://github.com/dfarnsworth/draggable
 * Copyright (c) 2012 Dylan Farnsworth; Licensed MIT */
 
@@ -31,13 +31,20 @@
 		// assign cursor type
 		opts.cursor && $el.css("cursor",opts.cursor);
 
+		if (opts.contain) {
+			var $parent = $el.parent();
+			opts.xMin = 0;
+			opts.xMax = $parent.outerWidth() - width;
+			opts.yMin = 0;
+			opts.yMax = $parent.outerHeight() - height;
+		}
+
 		// event listeners
 		$el.on(eStart, startDrag)
 		   .on("dragremove", destroy);
 
 		// startDrag()
 		function startDrag(e){
-			// e.preventDefault();
 			var ev = touchable ? e.originalEvent : e;
 			var offset = $el.offset();
 			var position = $el.position();
@@ -46,7 +53,7 @@
 			pageStartX = ev.pageX;
 			pageStartY = ev.pageY;
 			offsetStartX = offset.left + width - pageStartX;
-			offsetStartY = position.top + height - pageStartY;
+			offsetStartY = offset.top + height - pageStartY;
 			positionStartX = position.left;
 			positionStartY = position.top;
 
