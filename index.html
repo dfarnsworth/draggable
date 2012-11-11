@@ -10,12 +10,45 @@
 		<div class="page_wrap">
 			<h1>Draggable.js</h1>
 			<h2>jQuery draggability without jQuery UI</h2>
+			<p>
+				Using Draggable.js is as easy as <code>$(element).draggable();</code>
+			</p>
 			<div class="drag_container">
 				<div class="drag_target"></div>
 			</div>
 
+			<p>
+				To eliminate confining the draggable element to its parent, set <code>contain: false</code>
+			</p>
+			<div class="drag_container">
+				<div class="free_drag_target"></div>
+			</div>
+
+			<p>
+				Draggable elements can be constrained to either the x or y axis:<br/>
+				Constrain to vertical: <code>$(element).draggable({ horizontal: false });</code>
+			</p>
+			<div class="drag_container">
+				<div class="vertical_drag_target"></div>
+			</div>
+
+			<p>
+				Constrain to horizontal: <code>$(element).draggable({ vertical: false });</code>
+			</p>
+			<div class="drag_container">
+				<div class="horizontal_drag_target"></div>
+			</div>
+
+			<p>
+				Remove 'draggableness' by triggering <code>'dragremove'</code>: <a href="#" class="toggle_full">Toggle Draggable</a>
+
+			</p>
+			<div class="drag_container">
+				<div class="toggle_drag_target"></div>
+			</div>
 		</div>
 		<script src="js/jquery.js"></script>
 		<script src="https://raw.github.com/dfarnsworth/draggable/master/dist/draggable.js"></script>
+		<script src="js/main.js"></script>
 	</body>
 </html>
