@@ -1,4 +1,4 @@
-/*! Draggable - v0.5.0 - 2012-11-11
+/*! Draggable - v0.5.0 - 2012-12-05
 * https://github.com/dfarnsworth/draggable
 * Copyright (c) 2012 Dylan Farnsworth; Licensed MIT */
 
@@ -63,7 +63,8 @@
 
 		// stopDrag()
 		function stopDrag(){
-			$(window).off(eMove, doDrag);
+			$(window).off(eMove, doDrag)
+					 .off(eEnd, stopDrag);
 			$el.trigger(opts.eventEnd);
 		}
 

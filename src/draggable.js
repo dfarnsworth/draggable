@@ -62,7 +62,8 @@
 
 		// stopDrag()
 		function stopDrag(){
-			$(window).off(eMove, doDrag);
+			$(window).off(eMove, doDrag)
+					 .off(eEnd, stopDrag);
 			$el.trigger(opts.eventEnd);
 		}
 
