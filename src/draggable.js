@@ -56,14 +56,12 @@
 			positionStartX = position.left;
 			positionStartY = position.top;
 
-			$(window).on(eMove, doDrag)
-					 .on(eEnd, stopDrag);
+			$(window).on(eMove, doDrag).on(eEnd, stopDrag);
 		}
 
 		// stopDrag()
 		function stopDrag(){
-			$(window).off(eMove, doDrag)
-					 .off(eEnd, stopDrag);
+			$(window).off(eMove, doDrag).off(eEnd, stopDrag);
 			$el.trigger(opts.eventEnd);
 		}
 
